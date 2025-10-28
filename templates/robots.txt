@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Bloquear el acceso al panel de administración de Django y archivos estáticos
+Disallow: /admin/
+Disallow: /static/
+
+# Especifica la ubicación de tu Sitemap (necesario para Google)
+Sitemap: https://tpi115-review.onrender.com/sitemap.xml
