@@ -1,0 +1,19 @@
+{% extends 'main.html' %} 
+
+{% block title %}Confirmar Eliminación | {{ review.title }}{% endblock title %}
+
+{% block content %}
+<div class="alert alert-danger mt-5 p-4 shadow-sm">
+    <h1 class="mb-3">Confirmar Eliminación</h1>
+    
+    <p class="lead">¿Estás seguro que deseas **ELIMINAR** la reseña:</p>
+    <p class="h4 text-dark mb-4">"{{ review.title }}"</p>
+
+    <form method="POST">
+        {% csrf_token %} 
+        
+        <button class="btn btn-danger me-3" type="submit">Sí, Eliminar Permanentemente</button>
+        <a href="{% url 'review_detail' review.slug %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
