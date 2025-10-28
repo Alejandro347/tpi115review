@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-de1@a9vnt(%s$yu%cfwx2_he_zql9ly0za+naw4zu3^*r7-w%#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# Configuraciones de Seguridad para Producción
+DEBUG = os.environ.get('DEBUG_VALUE', 'True') == 'True' 
+ALLOWED_HOSTS = ['*'] # Se reemplazará con el dominio de Render después
 
 
 # Application definition
@@ -136,8 +137,11 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 # Directorio donde Django recolectará todos los archivos estáticos
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+
 # Si quieres usar archivos estáticos a nivel de app (ej. reviews/static/css/...)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'), 
 ]
+
+# Aplicar settings de Heroku/Render (Base de Datos, Logging)
+django_heroku.settings(locals())
