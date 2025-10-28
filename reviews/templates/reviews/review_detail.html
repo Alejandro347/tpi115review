@@ -1,6 +1,6 @@
 {% extends 'main.html' %} 
 
-{% block title %}{{ review.title }} | Reseña TPI115 por {{ review.user.username }}{% endblock title %}
+{% block title %}{{ review.title }} | Opinión TPI115 por {{ review.user.username }}{% endblock title %}
 {% block description %}{{ review.content|truncatechars:150 }}{% endblock description %}
 
 {% block content %}
@@ -21,8 +21,8 @@
             <a href="{% url 'review_list' %}" class="btn btn-secondary me-3">Volver a la Lista</a>
             
             {% if user.is_authenticated and user.id == review.user.id %}
-                <a href="{% url 'review_update' review.slug %}" class="btn btn-warning me-2">Editar Reseña</a>
-                <a href="{% url 'review_delete' review.slug %}" class="btn btn-danger">Eliminar Reseña</a>
+                <a href="{% url 'review_update' review.slug %}" class="btn btn-warning me-2">Editar Opinión</a>
+                <a href="{% url 'review_delete' review.slug %}" class="btn btn-danger">Eliminar Opinión</a>
             {% endif %}
         </div>
     </div>

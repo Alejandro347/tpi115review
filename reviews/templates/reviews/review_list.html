@@ -1,15 +1,15 @@
 {% extends 'main.html' %} 
 
-{% block title %}Opiniones TPI115 UES | Reseñas y Comentarios de Materias{% endblock title %}
+{% block title %}Opiniones TPI115 UES | Opiniones y Comentarios de Materias{% endblock title %}
 
 {% block content %}
 
 <h1 class="display-5 mb-4 text-center">
-    Reseñas de la Materia TPI115
+    Opiniones de la Materia TPI115
 </h1>
 <p class="text-center">
     <a href="{% url 'review_create' %}" class="btn btn-success">
-        <i class="fas fa-plus-circle"></i> Escribir una Nueva Reseña
+        <i class="fas fa-plus-circle"></i> Escribir una Nueva Opinión
     </a>
 </p>
 <hr>
@@ -27,7 +27,7 @@
         
         <p class="card-text">{{ review.content|truncatewords:20 }}...</p>
         
-        <a href="{% url 'review_detail' review.slug %}" class="card-link btn btn-sm btn-outline-primary">Leer Reseña Completa</a>
+        <a href="{% url 'review_detail' review.slug %}" class="card-link btn btn-sm btn-outline-primary">Leer Opinión Completa</a>
         
         {% if user.is_authenticated and user.id == review.user.id %}
             <a href="{% url 'review_update' review.slug %}" class="card-link btn btn-sm btn-warning">Editar</a>
@@ -36,7 +36,7 @@
     </div>
 </div>
 {% empty %}
-<div class="alert alert-info text-center">No se han encontrado reseñas. ¡Sé el primero en publicar tu opinión!</div>
+<div class="alert alert-info text-center">No se han encontrado opiniones. ¡Sé el primero en publicar tu opinión!</div>
 {% endfor %}
 
 {% endblock content %}

@@ -4,8 +4,8 @@ from .views import ReviewList, ReviewDetail, ReviewCreate, ReviewUpdate, ReviewD
 
 urlpatterns = [
     path('', ReviewList.as_view(), name='review_list'),
-    path('crear/', ReviewCreate.as_view(), name='review_create'),
-    path('reseña/<slug:slug>/', ReviewDetail.as_view(), name='review_detail'),
-    path('editar/<slug:slug>/', ReviewUpdate.as_view(), name='review_update'),
-    path('eliminar/<slug:slug>/', ReviewDelete.as_view(), name='review_delete'),
+    path('crear-opinion/', ReviewCreate.as_view(), name='review_create'),
+    path('opinion/<slug:slug>/', ReviewDetail.as_view(), name='review_detail'),
+    path('opinion/editar/<slug:slug>/', ReviewUpdate.as_view(), name='review_update'),
+    path('opinion/eliminar/<slug:slug>/', ReviewDelete.as_view(), name='review_delete'),
 ]

@@ -13,10 +13,7 @@ class ReviewSitemap(Sitemap):
     def items(self):
         # Filtra para excluir reseñas eliminadas o privadas (si existieran)
         return Review.objects.all()
-
-    # 2. Este método es opcional si ya usaste get_absolute_url() en el modelo, 
-    # pero ayuda a garantizar la ruta correcta usando el slug.
-    # def location(self, obj):
-    #     return reverse('review_detail', kwargs={'slug': obj.slug}) 
     
-    # Nota: Si el modelo Review ya tiene get_absolute_url(), items() es suficiente.
+    # 2. Este método le dice a Django cómo obtener la URL de cada objeto.
+    def location(self, obj):
+        return reverse('review_detail', kwargs={'slug': obj.slug})
