@@ -1,30 +1,108 @@
 {% extends 'main.html' %} 
+{% load static %}
 
 {% block title %}{{ review.title }} | Opinión TPI115 por {{ review.user.username }}{% endblock title %}
-{% block description %}{{ review.content|truncatechars:150 }}{% endblock description %}
+{% block description %}{{ review.content|truncatechars:155 }}{% endblock description %}
+{% block keywords %}TPI115, UES, opinión, reseña, {{ review.user.username }}, Universidad de El Salvador{% endblock keywords %}
+{% block canonical_url %}{{ SITE_URL }}{{ review.get_absolute_url }}{% endblock canonical_url %}
+
+{% block og_type %}article{% endblock og_type %}
+{% block og_url %}{{ SITE_URL }}{{ review.get_absolute_url }}{% endblock og_url %}
+{% block og_title %}{{ review.title }} | Opinión TPI115{% endblock og_title %}
+{% block og_description %}{{ review.content|truncatechars:200 }}{% endblock og_description %}
+
+{% block twitter_title %}{{ review.title }} | Opinión TPI115{% endblock twitter_title %}
+{% block twitter_description %}{{ review.content|truncatechars:200 }}{% endblock twitter_description %}
+
+{% block article_meta %}
+<meta property="article:published_time" content="{{ review.created_at|date:'c' }}">
+<meta property="article:modified_time" content="{{ review.created_at|date:'c' }}">
+<meta property="article:author" content="{{ review.user.username }}">
+<meta property="article:section" content="Opiniones">
+<meta property="article:tag" content="TPI115">
+<meta property="article:tag" content="UES">
+{% endblock article_meta %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ review.title|escapejs }}",
+  "description": "{{ review.content|truncatechars:200|escapejs }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ review.user.username|escapejs }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ SITE_NAME|escapejs }}",
+    "url": "{{ SITE_URL }}"
+  },
+  "datePublished": "{{ review.created_at|date:'c' }}",
+  "dateModified": "{{ review.created_at|date:'c' }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ SITE_URL }}{{ review.get_absolute_url }}"
+  },
+  "url": "{{ SITE_URL }}{{ review.get_absolute_url }}"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "{{ SITE_URL }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ review.title|escapejs }}",
+      "item": "{{ SITE_URL }}{{ review.get_absolute_url }}"
+    }
+  ]
+}
+</script>
+{% endblock structured_data %}
 
 {% block content %}
-<article class="mt-5">
+<article class="mt-5" itemscope itemtype="https://schema.org/Article">
     <div class="card shadow-lg p-5">
-        <h1 class="card-title mb-3">{{ review.title }}</h1> 
+        <header class="mb-4">
+            <h1 class="card-title mb-3" itemprop="headline">{{ review.title }}</h1> 
+            
+            <div class="text-muted mb-3">
+                <p class="mb-1">
+                    <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+                        <span itemprop="name">Publicado por <strong>{{ review.user.username }}</strong></span>
+                    </span>
+                    el <time datetime="{{ review.created_at|date:'c' }}" itemprop="datePublished">{{ review.created_at|date:"d M, Y" }}</time>
+                </p>
+                <meta itemprop="dateModified" content="{{ review.created_at|date:'c' }}">
+            </div>
+        </header>
         
-        <p class="text-muted">
-            Publicado por <strong>{{ review.user.username }}</strong> el {{ review.created_at|date:"d M, Y" }}
-        </p>
         <hr>
         
-        <div class="lead" style="white-space: pre-wrap;">
+        <div class="article-content lead" style="white-space: pre-wrap;" itemprop="articleBody">
             {{ review.content }}
         </div>
 
-        <div class="mt-4">
-            <a href="{% url 'review_list' %}" class="btn btn-secondary me-3">Volver a la Lista</a>
-            
-            {% if user.is_authenticated and user.id == review.user.id %}
-                <a href="{% url 'review_update' review.slug %}" class="btn btn-warning me-2">Editar Opinión</a>
-                <a href="{% url 'review_delete' review.slug %}" class="btn btn-danger">Eliminar Opinión</a>
-            {% endif %}
-        </div>
+        <footer class="mt-4">
+            <nav aria-label="Navegación de artículo">
+                <a href="{% url 'review_list' %}" class="btn btn-secondary me-3" aria-label="Volver a la lista de opiniones">← Volver a la Lista</a>
+                
+                {% if user.is_authenticated and user.id == review.user.id %}
+                    <a href="{% url 'review_update' review.slug %}" class="btn btn-warning me-2" aria-label="Editar esta opinión">Editar Opinión</a>
+                    <a href="{% url 'review_delete' review.slug %}" class="btn btn-danger" aria-label="Eliminar esta opinión">Eliminar Opinión</a>
+                {% endif %}
+            </nav>
+        </footer>
     </div>
 </article>
 {% endblock content %}

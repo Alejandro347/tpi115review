@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'config.context_processors.seo_context',
             ],
         },
     },
@@ -134,6 +135,11 @@ SITE_ID = 1
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+# Configuración SEO
+SITE_URL = os.environ.get('SITE_URL', 'https://tpi115-review.onrender.com')
+SITE_NAME = 'TPI115 Review | Opiniones UES'
+SITE_DESCRIPTION = 'Opiniones honestas de la materia TPI115 en la Facultad de Ingeniería y Arquitectura de la Universidad de El Salvador.'
 
 # Directorio donde Django recolectará todos los archivos estáticos
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

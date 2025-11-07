@@ -1,42 +1,113 @@
 {% extends 'main.html' %} 
 
 {% block title %}Opiniones TPI115 UES | Opiniones y Comentarios de Materias{% endblock title %}
+{% block description %}Descubre las opiniones y reseñas de estudiantes sobre la materia TPI115 en la Universidad de El Salvador. Comparte tu experiencia y ayuda a otros estudiantes.{% endblock description %}
+{% block keywords %}TPI115, UES, opiniones, reseñas, materias, Universidad de El Salvador, estudiantes, experiencias{% endblock keywords %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Opiniones TPI115 UES",
+  "description": "Opiniones y reseñas de estudiantes sobre la materia TPI115",
+  "url": "{{ SITE_URL }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ SITE_NAME }}",
+    "url": "{{ SITE_URL }}"
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": "{{ reviews|length }}",
+    "itemListElement": [
+      {% for review in reviews %}
+      {
+        "@type": "ListItem",
+        "position": {{ forloop.counter }},
+        "item": {
+          "@type": "Article",
+          "headline": "{{ review.title|escapejs }}",
+          "url": "{{ SITE_URL }}{{ review.get_absolute_url }}",
+          "author": {
+            "@type": "Person",
+            "name": "{{ review.user.username|escapejs }}"
+          },
+          "datePublished": "{{ review.created_at|date:'c' }}"
+        }
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ SITE_NAME }}",
+  "url": "{{ SITE_URL }}",
+  "description": "{{ SITE_DESCRIPTION }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ SITE_URL }}/?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endblock structured_data %}
 
 {% block content %}
 
-<h1 class="display-5 mb-4 text-center">
-    Opiniones de la Materia TPI115
-</h1>
-<p class="text-center">
-    <a href="{% url 'review_create' %}" class="btn btn-success">
-        <i class="fas fa-plus-circle"></i> Escribir una Nueva Opinión
-    </a>
-</p>
+<header class="mb-5">
+    <h1 class="display-5 mb-4 text-center">
+        Opiniones de la Materia TPI115
+    </h1>
+    <p class="lead text-center text-muted">
+        Comparte tu experiencia y ayuda a otros estudiantes a conocer más sobre esta materia
+    </p>
+    <p class="text-center">
+        <a href="{% url 'review_create' %}" class="btn btn-success btn-lg">
+            <i class="fas fa-plus-circle"></i> Escribir una Nueva Opinión
+        </a>
+    </p>
+</header>
+
 <hr>
 
-{% for review in reviews %}
-<div class="card mb-3 shadow-sm">
-    <div class="card-body">
-        <h2 class="card-title h4">
-            <a href="{% url 'review_detail' review.slug %}">{{ review.title }}</a>
-        </h2>
-        
-        <p class="card-subtitle mb-2 text-muted">
-            Publicado por {{ review.user.username }} el {{ review.created_at|date:"d M, Y" }}
-        </p>
-        
-        <p class="card-text">{{ review.content|truncatewords:20 }}...</p>
-        
-        <a href="{% url 'review_detail' review.slug %}" class="card-link btn btn-sm btn-outline-primary">Leer Opinión Completa</a>
-        
-        {% if user.is_authenticated and user.id == review.user.id %}
-            <a href="{% url 'review_update' review.slug %}" class="card-link btn btn-sm btn-warning">Editar</a>
-            <a href="{% url 'review_delete' review.slug %}" class="card-link btn btn-sm btn-danger">Eliminar</a>
-        {% endif %}
+<main>
+    {% for review in reviews %}
+    <article class="card mb-3 shadow-sm" itemscope itemtype="https://schema.org/Article">
+        <div class="card-body">
+            <h2 class="card-title h4" itemprop="headline">
+                <a href="{% url 'review_detail' review.slug %}" itemprop="url">{{ review.title }}</a>
+            </h2>
+            
+            <p class="card-subtitle mb-2 text-muted">
+                <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <span itemprop="name">Publicado por {{ review.user.username }}</span>
+                </span>
+                el <time datetime="{{ review.created_at|date:'c' }}" itemprop="datePublished">{{ review.created_at|date:"d M, Y" }}</time>
+            </p>
+            
+            <p class="card-text" itemprop="description">{{ review.content|truncatewords:20 }}...</p>
+            
+            <div class="mt-3">
+                <a href="{% url 'review_detail' review.slug %}" class="card-link btn btn-sm btn-outline-primary" aria-label="Leer opinión completa: {{ review.title }}">Leer Opinión Completa</a>
+                
+                {% if user.is_authenticated and user.id == review.user.id %}
+                    <a href="{% url 'review_update' review.slug %}" class="card-link btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'review_delete' review.slug %}" class="card-link btn btn-sm btn-danger">Eliminar</a>
+                {% endif %}
+            </div>
+        </div>
+    </article>
+    {% empty %}
+    <div class="alert alert-info text-center" role="alert">
+        <h2 class="h4">No se han encontrado opiniones</h2>
+        <p>¡Sé el primero en publicar tu opinión y ayudar a otros estudiantes!</p>
     </div>
-</div>
-{% empty %}
-<div class="alert alert-info text-center">No se han encontrado opiniones. ¡Sé el primero en publicar tu opinión!</div>
-{% endfor %}
+    {% endfor %}
+</main>
 
 {% endblock content %}

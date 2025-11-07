@@ -1,9 +1,23 @@
+# robots.txt para TPI115 Review
+# Permite a los motores de búsqueda indexar el contenido público
+
 User-agent: *
 Allow: /
+Allow: /opinion/
 
-# Bloquear el acceso al panel de administración de Django y archivos estáticos
+# Bloquear el acceso al panel de administración y rutas privadas
 Disallow: /admin/
 Disallow: /static/
+Disallow: /staticfiles/
+Disallow: /crear-opinion/
+Disallow: /opinion/editar/
+Disallow: /opinion/eliminar/
+Disallow: /login/
+Disallow: /register/
+Disallow: /logout/
 
-# Especifica la ubicación de tu Sitemap (necesario para Google)
+# Crawl-delay (opcional, ayuda a no sobrecargar el servidor)
+Crawl-delay: 1
+
+# Especifica la ubicación del Sitemap (necesario para Google)
 Sitemap: https://tpi115-review.onrender.com/sitemap.xml

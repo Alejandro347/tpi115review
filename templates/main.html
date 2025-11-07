@@ -4,11 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>{% block title %}TPI115 Review | UES Opiniones{% endblock title %}</title>
-    <meta name="description" content="{% block description %}Opiniones honestas de la materia TPI115 en la Facultad de Ingenieria y Arquitectura de la Universidad de El Salvador.{% endblock description %}">
+    <!-- Primary Meta Tags -->
+    <title>{% block title %}{{ SITE_NAME }}{% endblock title %}</title>
+    <meta name="title" content="{% block meta_title %}{{ SITE_NAME }}{% endblock meta_title %}">
+    <meta name="description" content="{% block description %}{{ SITE_DESCRIPTION }}{% endblock description %}">
+    <meta name="keywords" content="{% block keywords %}TPI115, UES, Universidad de El Salvador, opiniones, reseñas, materias, ingeniería{% endblock keywords %}">
+    <meta name="author" content="{% block author %}{{ SITE_NAME }}{% endblock author %}">
+    <meta name="robots" content="{% block robots %}index, follow{% endblock robots %}">
+    <meta name="language" content="Spanish">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Google Verification -->
     <meta name="google-site-verification" content="mAhuhYAiFK5QQko2IPTO2-GglnK1Ls4dwNYJfro7f-g" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ SITE_URL }}{{ request.path }}{% endblock canonical_url %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock og_type %}">
+    <meta property="og:url" content="{% block og_url %}{{ SITE_URL }}{{ request.path }}{% endblock og_url %}">
+    <meta property="og:title" content="{% block og_title %}{% block title %}{{ SITE_NAME }}{% endblock title %}{% endblock og_title %}">
+    <meta property="og:description" content="{% block og_description %}{% block description %}{{ SITE_DESCRIPTION }}{% endblock description %}{% endblock og_description %}">
+    <meta property="og:image" content="{% block og_image %}{{ SITE_URL }}/static/og-image.jpg{% endblock og_image %}">
+    <meta property="og:site_name" content="{{ SITE_NAME }}">
+    <meta property="og:locale" content="es_SV">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock twitter_card %}">
+    <meta name="twitter:url" content="{% block twitter_url %}{{ SITE_URL }}{{ request.path }}{% endblock twitter_url %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% block title %}{{ SITE_NAME }}{% endblock title %}{% endblock twitter_title %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% block description %}{{ SITE_DESCRIPTION }}{% endblock description %}{% endblock twitter_description %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ SITE_URL }}/static/og-image.jpg{% endblock twitter_image %}">
+    
+    <!-- Article Meta Tags (para páginas de reseñas) -->
+    {% block article_meta %}{% endblock article_meta %}
+    
+    <!-- Schema.org Structured Data -->
+    {% block structured_data %}{% endblock structured_data %}
         
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{% url 'review_list' %}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
