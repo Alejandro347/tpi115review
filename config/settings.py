@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-de1@a9vnt(%s$yu%cfwx2_he_zql9ly0za+naw4zu3^*r7-w%#'
+# Usar variable de entorno en producción, fallback a clave de desarrollo
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-de1@a9vnt(%s$yu%cfwx2_he_zql9ly0za+naw4zu3^*r7-w%#')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Configuraciones de Seguridad para Producción
-DEBUG = os.environ.get('DEBUG_VALUE', 'True') == 'True' 
-ALLOWED_HOSTS = ['*'] # Se reemplazará con el dominio de Render después
+DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -81,12 +83,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Usar PostgreSQL si DATABASE_URL está disponible (producción), sino SQLite (desarrollo)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Si hay una URL de base de datos (típico en producción con Dokploy/Render/Heroku)
+# Sobrescribir con PostgreSQL
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 
 
 # Password validation
