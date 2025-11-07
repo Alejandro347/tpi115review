@@ -145,9 +145,11 @@ SITE_DESCRIPTION = 'Opiniones honestas de la materia TPI115 en la Facultad de In
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Si quieres usar archivos estáticos a nivel de app (ej. reviews/static/css/...)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'), 
-]
+# Solo agregar el directorio si existe (evita warnings en producción)
+STATICFILES_DIRS = []
+static_dir = os.path.join(BASE_DIR, 'static')
+if os.path.exists(static_dir):
+    STATICFILES_DIRS.append(static_dir)
 
 # Aplicar settings de Heroku/Render (Base de Datos, Logging)
 django_heroku.settings(locals())
